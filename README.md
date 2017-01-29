@@ -1,4 +1,3 @@
 # nbody-sim
 nbody physics simulation
-
-#Added Basic Physics formulas, va.01
+Added Basic Physics formulas, va.01
