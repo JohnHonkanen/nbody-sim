@@ -15,21 +15,21 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="main.cpp">
+    <ClCompile Include="nbody-sim\main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Physics.cpp">
+    <ClCompile Include="nbody-sim\Physics.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="stubParticle.cpp">
+    <ClCompile Include="nbody-sim\stubParticle.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Physics.h">
+    <ClInclude Include="nbody-sim\stubParticle.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="stubParticle.h">
+    <ClInclude Include="nbody-sim\Physics.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

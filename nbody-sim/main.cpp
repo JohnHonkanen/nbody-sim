@@ -32,6 +32,4 @@ int main()
 		cout << pBody2.particle.position.x << " || " << pBody2.particle.position.y << endl;
 		cin.get();
 	}
-
-
 }

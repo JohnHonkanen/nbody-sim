@@ -18,6 +18,15 @@
       <Platform>x64</Platform>
     </ProjectConfiguration>
   </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="nbody-sim\main.cpp" />
+    <ClCompile Include="nbody-sim\Physics.cpp" />
+    <ClCompile Include="nbody-sim\stubParticle.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="nbody-sim\Physics.h" />
+    <ClInclude Include="nbody-sim\stubParticle.h" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{1F9E8E97-7F41-401A-9565-72989FFC6BA2}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
@@ -98,15 +107,6 @@
       <OptimizeReferences>true</OptimizeReferences>
     </Link>
   </ItemDefinitionGroup>
-  <ItemGroup>
-    <ClCompile Include="main.cpp" />
-    <ClCompile Include="Physics.cpp" />
-    <ClCompile Include="stubParticle.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="Physics.h" />
-    <ClInclude Include="stubParticle.h" />
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
