@@ -10,7 +10,7 @@ int main()
 {
 	stubParticle p1;
 	p1.position = vec2(50,50);
-	p1.mass = 300;
+	p1.mass = 10000;
 
 	stubParticle p2;
 	p2.position = vec2(-50, -50);
