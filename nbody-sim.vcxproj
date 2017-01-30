@@ -21,10 +21,12 @@
   <ItemGroup>
     <ClCompile Include="nbody-sim\main.cpp" />
     <ClCompile Include="nbody-sim\Physics.cpp" />
+    <ClCompile Include="nbody-sim\SimulationManager.cpp" />
     <ClCompile Include="nbody-sim\stubParticle.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="nbody-sim\Physics.h" />
+    <ClInclude Include="nbody-sim\SimulationManager.h" />
     <ClInclude Include="nbody-sim\stubParticle.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
@@ -78,6 +80,9 @@
     <LinkIncremental>true</LinkIncremental>
     <IncludePath>C:\dev\glm-0.9.8.3\glm;$(IncludePath)</IncludePath>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <IncludePath>C:\dev\glm-0.9.8.3\glm;C:\dev\SDL2-2.0.5\include;$(IncludePath)</IncludePath>
+  </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
@@ -109,8 +114,12 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
-      <AdditionalIncludeDirectories>C:\dev\glm-0.9.8.3\glm;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\dev\SDL2-2.0.5\include;C:\dev\glm-0.9.8.3\glm;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
+    <Link>
+      <AdditionalLibraryDirectories>C:\dev\SDL2-2.0.5\lib\x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>SDL2.lib;SDL2main.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

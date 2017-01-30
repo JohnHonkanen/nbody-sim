@@ -24,12 +24,18 @@
     <ClCompile Include="nbody-sim\stubParticle.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="nbody-sim\SimulationManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="nbody-sim\stubParticle.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="nbody-sim\Physics.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="nbody-sim\SimulationManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -1,35 +1,37 @@
-#include <glm\glm.hpp>
-#include <iostream>
-#include <string>
-#include <float.h>
-#include "Physics.h"
+#include <SDL.h>
+#include "SimulationManager.h"
 
 using namespace std;
-using namespace glm;
-int main()
+
+
+bool init() {
+	SDL_Init(SDL_INIT_VIDEO); // initialize SDL
+	return true;
+}
+
+
+int wmain(int argc, char *argv[])
 {
-	stubParticle p1;
-	p1.position = vec2(50,50);
-	p1.mass = 10000;
+	SDL_GLContext glContext; // OpenGL context handle
+	SDL_Window * window; // window handle
 
-	stubParticle p2;
-	p2.position = vec2(-50, -50);
-	p2.mass = 300;
+	window = SDL_CreateWindow("SDL Test",
+		100, 100, 800, 600,
+		SDL_WINDOW_SHOWN | SDL_WINDOW_RESIZABLE);
+	glContext = SDL_GL_CreateContext(window);
+	SDL_Renderer* renderer = NULL;
+	renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
 
-	Physics pBody1 = Physics();
-	pBody1.addStub(p1);
+	if (!init) {
 
-	Physics pBody2 = Physics();
-	pBody2.addStub(p2);
-
-	//Infinite Loop
-	while (true) {
-		cout << "Particle 1 Position" << endl;
-		pBody1.calculateGravityFrom(pBody2.particle);
-		cout << pBody1.particle.position.x << " || " << pBody1.particle.position.y << endl;
-		cout << "Particle 2 Position" << endl;
-		pBody2.calculateGravityFrom(pBody1.particle);
-		cout << pBody2.particle.position.x << " || " << pBody2.particle.position.y << endl;
-		cin.get();
 	}
+	else {
+		SimulationManager manager = SimulationManager();
+		manager.run(window, renderer);
+	}
+							  // Create 800x600 window
+
+	SDL_DestroyWindow(window);
+	SDL_Quit();
+	return 0;
 }
