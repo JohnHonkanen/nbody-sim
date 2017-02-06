@@ -20,14 +20,23 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="nbody-sim\main.cpp" />
+    <ClCompile Include="nbody-sim\Particle.cpp" />
     <ClCompile Include="nbody-sim\Physics.cpp" />
+    <ClCompile Include="nbody-sim\rt3d.cpp" />
     <ClCompile Include="nbody-sim\SimulationManager.cpp" />
     <ClCompile Include="nbody-sim\stubParticle.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="nbody-sim\Particle.h" />
     <ClInclude Include="nbody-sim\Physics.h" />
+    <ClInclude Include="nbody-sim\rt3d.h" />
     <ClInclude Include="nbody-sim\SimulationManager.h" />
     <ClInclude Include="nbody-sim\stubParticle.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="nbody-sim\minimal.frag" />
+    <None Include="nbody-sim\minimal.vert" />
+    <None Include="nbody-sim\mvp.vert" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{1F9E8E97-7F41-401A-9565-72989FFC6BA2}</ProjectGuid>
@@ -81,7 +90,7 @@
     <IncludePath>C:\dev\glm-0.9.8.3\glm;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>C:\dev\glm-0.9.8.3\glm;C:\dev\SDL2-2.0.5\include;$(IncludePath)</IncludePath>
+    <IncludePath>C:\dev\glew-2.0.0\include;C:\dev\glm-0.9.8.3\glm;C:\dev\SDL2-2.0.5\include;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -117,8 +126,8 @@
       <AdditionalIncludeDirectories>C:\dev\SDL2-2.0.5\include;C:\dev\glm-0.9.8.3\glm;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
-      <AdditionalLibraryDirectories>C:\dev\SDL2-2.0.5\lib\x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>SDL2.lib;SDL2main.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>C:\dev\glew-2.0.0\lib\Release\x64;C:\dev\SDL2-2.0.5\lib\x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>SDL2.lib;SDL2main.lib;glew32.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

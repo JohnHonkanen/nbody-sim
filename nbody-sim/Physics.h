@@ -1,6 +1,5 @@
 #pragma once
-#include "stubParticle.h"
-
+#include <glm\glm.hpp>
 using namespace glm;
 
 class Physics
@@ -8,13 +7,8 @@ class Physics
 public:
 	Physics();
 	virtual ~Physics();
-	void calculateGravityFrom(stubParticle p2);
-	vec2 getVelocity();
-	void addStub(stubParticle p);
-
-	stubParticle particle;
+	vec2 calculateGravityFrom(vec2 p1, vec2 p2, float mass);
 private:
-	vec2 velocity = vec2(0,0);
 	float distanceBetween(vec2 p1, vec2 p2);
 	float angleBetween(vec2 p1, vec2 p2);
 	//Utility Functions for Physics

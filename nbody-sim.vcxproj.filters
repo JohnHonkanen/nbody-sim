@@ -18,13 +18,19 @@
     <ClCompile Include="nbody-sim\main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="nbody-sim\Physics.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="nbody-sim\stubParticle.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="nbody-sim\SimulationManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="nbody-sim\rt3d.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="nbody-sim\Particle.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="nbody-sim\Physics.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -32,11 +38,28 @@
     <ClInclude Include="nbody-sim\stubParticle.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="nbody-sim\Physics.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="nbody-sim\SimulationManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="nbody-sim\rt3d.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="nbody-sim\Particle.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="nbody-sim\Physics.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="nbody-sim\minimal.frag">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="nbody-sim\minimal.vert">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="nbody-sim\mvp.vert">
+      <Filter>Resource Files</Filter>
+    </None>
   </ItemGroup>
 </Project>
