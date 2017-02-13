@@ -14,12 +14,12 @@ Calculate Gravity Pull for Particle p2 on Particle p1
 @param p2 Position of particle 2
 @param mass mass of particle 2
 **/
-vec2 Physics::calculateGravityFrom(vec2 p1, vec2 p2, float mass)
+vec2 Physics::calculateGravityFrom(vec2 p1, vec2 p2, double mass, double mass2)
 {
 	vec2 gravity = vec2(0, 0);
 	float dist = distanceBetween(p1, p2); // Distance between 2 particle
 	float angle = angleBetween(p1, p2); // Calculate the angle for the gravity
-	float magnitude = mass / (dist*dist); // Calculate Strength/Length of the gravity
+	float magnitude =  (mass2) / ((dist*dist) + EPS); // Calculate Strength/Length of the gravity
 	setLengthOf(gravity, magnitude); // Set Strength of the gravity
 	setAngleOf(gravity, angle); // Set Direction of the gravity
 	return gravity;

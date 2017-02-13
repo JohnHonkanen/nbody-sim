@@ -19,7 +19,7 @@ ParticleManager::ParticleManager(int particleCount)
 
 Particle* ParticleManager::generateParticle()
 {
-	return new Particle(vec2(rnd(400,3200), rnd(300, 2100)), 100, vec2(0, -1));
+	return new Particle(vec2(rnd(500,3300), rnd(200, 2200)), 1, vec2(30,0));
 }
 
 void ParticleManager::init() 
@@ -30,6 +30,7 @@ void ParticleManager::init()
 	{
 		addParticle(generateParticle());
 	}
+	addParticle(new Particle(vec2(1800, 1200), 1e6, vec2(0, 0), false));
 }
 
 void ParticleManager::addParticle(Particle* p1)
@@ -44,7 +45,6 @@ void ParticleManager::addParticle(Particle* p1)
 void ParticleManager::accept(Physics physics)
 {
 	calculateForces(physics);
-	moveParticles();
 }
 
 void ParticleManager::draw()

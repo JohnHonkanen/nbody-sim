@@ -68,7 +68,7 @@ void SimulationManager::update() {
 	Handle Rendering for simulation
 */
 void SimulationManager::draw(SDL_Window *window) {
-	glClearColor(0.5f, 0.5f, 0.5f, 1.0f);
+	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT);
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
