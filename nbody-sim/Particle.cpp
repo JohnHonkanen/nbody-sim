@@ -31,7 +31,10 @@ void Particle::accept(Physics physics, Particle* p2)
 {
 	vec2 grav = physics.calculateGravityFrom(this->position, p2->position, p2->mass); // Obtain the gravity vector
 	this->velocity += grav; //Add velocity to Particle gravity
-	this->position += velocity; //Add our velocity to position
-	//p2->velocity += grav;
-	//p2->position += p2->velocity;
+	p2->velocity -= grav; // Fix with Actual inverse
+}
+/* Moves the particle with respect to position and velocity*/
+void Particle::move()
+{
+	this->position += this->velocity; //Add our velocity to position
 }

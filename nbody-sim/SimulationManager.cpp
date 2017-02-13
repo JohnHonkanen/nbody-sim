@@ -13,9 +13,8 @@ SimulationManager::~SimulationManager()
 */
 void SimulationManager::init()
 {
-	this->particle[0] = new Particle(vec2(8000,6000), 500000, vec2(-7.0f, 0));
-	this->particle[1] = new Particle(vec2(4000, 4000), 500000, vec2(4.0f, 0));
-	this->particle[2] = new Particle(vec2(12000, 9000), 100, vec2(1, -5.0f));
+	pManager = ParticleManager(250);
+	pManager.init();
 }
 /*
 	Main Loop for Simulation
@@ -61,13 +60,9 @@ bool SimulationManager::pollEvents(SDL_Event sdlEvent) {
 	Handle and Calculate Physics for Simulation
 */
 void SimulationManager::update() {
-	this->particle[0]->accept(this->physicsVisitor, this->particle[1]);
-	this->particle[0]->accept(this->physicsVisitor, this->particle[2]);
-	this->particle[1]->accept(this->physicsVisitor, this->particle[0]);
-	this->particle[1]->accept(this->physicsVisitor, this->particle[2]);
-	this->particle[2]->accept(this->physicsVisitor, this->particle[0]);
-	this->particle[2]->accept(this->physicsVisitor, this->particle[1]);
-	//std::cout << this->particle[0]->position.x << "!!" << this->particle[0]->position.y << std::endl;
+
+	pManager.accept(physicsVisitor);
+
 }
 /*
 	Handle Rendering for simulation
@@ -77,14 +72,11 @@ void SimulationManager::draw(SDL_Window *window) {
 	glClear(GL_COLOR_BUFFER_BIT);
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
-	glOrtho(0, 16000*zoom, 0, 12000*zoom, 0.0f, 1.0f); // Reference system of our simulation
+	glOrtho(0, 3600*zoom, 0, 2400*zoom, 0.0f, 1.0f); // Reference system of our simulation
 	glColor3f(0.5, 1.0, 1.0);
-	glPointSize(10.0f);
-	glBegin(GL_POINTS);
-	glVertex3f(this->particle[0]->position.x, this->particle[0]->position.y, 0.0);
-	glVertex3f(this->particle[1]->position.x, this->particle[1]->position.y, 0.0);
-	glVertex3f(this->particle[2]->position.x, this->particle[2]->position.y, 0.0);
-	glEnd();
+	glPointSize(2.0f * zoom);
+
+	pManager.draw();
 
 	SDL_GL_SwapWindow(window); // swap buffers
 }

@@ -6,6 +6,7 @@
 #include <glm/gtc/type_ptr.hpp>
 #include "rt3d.h"
 #include "Particle.h"
+#include "ParticleManager.h" //Added
 #include <iostream>
 
 #define DEG_TO_RADIAN 0.017453293
@@ -24,5 +25,6 @@ private:
 	Particle* particle[3];
 	Physics physicsVisitor;
 	float zoom = 1.0f;
+	ParticleManager pManager;
 };
 

@@ -21,14 +21,18 @@
   <ItemGroup>
     <ClCompile Include="nbody-sim\main.cpp" />
     <ClCompile Include="nbody-sim\Particle.cpp" />
+    <ClCompile Include="nbody-sim\ParticleManager.cpp" />
     <ClCompile Include="nbody-sim\Physics.cpp" />
+    <ClCompile Include="nbody-sim\Rnd.cpp" />
     <ClCompile Include="nbody-sim\rt3d.cpp" />
     <ClCompile Include="nbody-sim\SimulationManager.cpp" />
     <ClCompile Include="nbody-sim\stubParticle.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="nbody-sim\Particle.h" />
+    <ClInclude Include="nbody-sim\ParticleManager.h" />
     <ClInclude Include="nbody-sim\Physics.h" />
+    <ClInclude Include="nbody-sim\Rnd.h" />
     <ClInclude Include="nbody-sim\rt3d.h" />
     <ClInclude Include="nbody-sim\SimulationManager.h" />
     <ClInclude Include="nbody-sim\stubParticle.h" />

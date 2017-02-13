@@ -12,6 +12,7 @@ public:
 	glm::vec2 position;
 	float mass;
 	void accept(Physics physics, Particle* p2);
+	void move();
 private:
 	glm::vec2 velocity;
 };
