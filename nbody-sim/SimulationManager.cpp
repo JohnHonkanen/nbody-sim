@@ -13,7 +13,7 @@ SimulationManager::~SimulationManager()
 */
 void SimulationManager::init()
 {
-	pManager = ParticleManager(250);
+	pManager = ParticleManager(350);
 	pManager.init();
 }
 /*
@@ -72,9 +72,8 @@ void SimulationManager::draw(SDL_Window *window) {
 	glClear(GL_COLOR_BUFFER_BIT);
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
-	glOrtho(0, 3600*zoom, 0, 2400*zoom, 0.0f, 1.0f); // Reference system of our simulation
+	glOrtho(0, 3.6e4*zoom, 0, 2.4e4*zoom, 0.0f, 1.0f); // Reference system of our simulation
 	glColor3f(0.5, 1.0, 1.0);
-	glPointSize(2.0f * zoom);
 
 	pManager.draw();
 

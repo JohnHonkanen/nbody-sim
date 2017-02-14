@@ -4,5 +4,5 @@
 
 #ifndef RND_H
 #define RND_H
-float rnd(int rangemin, int rangemax);
+double rnd(double rangemin, double rangemax);
 #endif

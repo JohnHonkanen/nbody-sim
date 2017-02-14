@@ -1,5 +1,6 @@
 #pragma once
 #include <glm\glm.hpp>
+#include <iostream>
 #include <limits>
 using namespace glm;
 
@@ -16,7 +17,7 @@ public:
 private:
 	const double EPS = DBL_EPSILON;
 	const double GRAV_CONST = 6.673E-11;
-	float distanceBetween(vec2 p1, vec2 p2);
+	double distanceBetween(vec2 p1, vec2 p2);
 	float angleBetween(vec2 p1, vec2 p2);
 	//Utility Functions for Physics
 	//End of Utility

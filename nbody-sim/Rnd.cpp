@@ -1,9 +1,10 @@
 
 #include "Rnd.h"
 
-float rnd(int rangemin, int rangemax)			// random float within supplied range...
+double rnd(double rangemin, double rangemax)			// random float within supplied range...
 {
-	return rand() % (rangemax - rangemin) + rangemin;
+	double f = (double)rand() / RAND_MAX;
+	return f * (rangemax - rangemin) + rangemin;
 }
 
 

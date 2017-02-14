@@ -19,7 +19,7 @@ ParticleManager::ParticleManager(int particleCount)
 
 Particle* ParticleManager::generateParticle()
 {
-	return new Particle(vec2(rnd(500,3300), rnd(200, 2200)), 1, vec2(30,0));
+	return new Particle(vec2(rnd(100, 3.6e4), rnd(100, 2.4e4)), rnd(5e2, 5e10), vec2(rnd(-30,30), rnd(-30, 30)));
 }
 
 void ParticleManager::init() 
@@ -30,7 +30,8 @@ void ParticleManager::init()
 	{
 		addParticle(generateParticle());
 	}
-	addParticle(new Particle(vec2(1800, 1200), 1e6, vec2(0, 0), false));
+	addParticle(new Particle(vec2(1.5e4, 1.3e4), 1e16, vec2(30,10), true, 5));
+	addParticle(new Particle(vec2(1.8e4, 1.2e4), 5e16, vec2(0, 0), true, 5)); //Error With Physics Code. Need to fix
 }
 
 void ParticleManager::addParticle(Particle* p1)
@@ -51,16 +52,16 @@ void ParticleManager::draw()
 {
 	ParticleList* current = this->head;
 		
-	glBegin(GL_POINTS);
 
 	while (current != nullptr)
 	{
+		glPointSize(current->particle->size);
+		glBegin(GL_POINTS);
 		//std::cout << current->particle->position.x << " || " << current->particle->position.y << std::endl;
 		glVertex3f(current->particle->position.x, current->particle->position.y, 0.0);
 		current = current->next;
+		glEnd();
 	}
-
-	glEnd();
 }
 
 void ParticleManager::calculateForces(Physics physics)

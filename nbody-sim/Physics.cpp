@@ -17,9 +17,9 @@ Calculate Gravity Pull for Particle p2 on Particle p1
 vec2 Physics::calculateGravityFrom(vec2 p1, vec2 p2, double mass, double mass2)
 {
 	vec2 gravity = vec2(0, 0);
-	float dist = distanceBetween(p1, p2); // Distance between 2 particle
+	double dist = distanceBetween(p1, p2); // Distance between 2 particle
 	float angle = angleBetween(p1, p2); // Calculate the angle for the gravity
-	float magnitude =  (mass2) / ((dist*dist) + EPS); // Calculate Strength/Length of the gravity
+	double magnitude =  GRAV_CONST * (mass * mass2) / ((dist*dist) + (EPS*EPS)); // Calculate Strength/Length of the gravity
 	setLengthOf(gravity, magnitude); // Set Strength of the gravity
 	setAngleOf(gravity, angle); // Set Direction of the gravity
 	return gravity;
@@ -30,7 +30,7 @@ Get the distance of particle p2 from particle p1
 @param p2 Particle 2 position
 @return float Distance from p1 to p2
 **/
-float Physics::distanceBetween(vec2 p1, vec2 p2)
+double Physics::distanceBetween(vec2 p1, vec2 p2)
 {
 	float dx = p2.x - p1.x; // Difference between p2 x and p1 x
 	float dy = p2.y - p1.y; // Difference between p2 y and p1 y
