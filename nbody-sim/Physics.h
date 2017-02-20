@@ -14,11 +14,11 @@ public:
 	float getAngleOf(vec2 p);
 	void setAngleOf(vec2 &p, float angle);
 	void setLengthOf(vec2 &p, float length);
+	double distanceBetween(vec2 p1, vec2 p2);
+	float angleBetween(vec2 p1, vec2 p2);
 private:
 	const double EPS = DBL_EPSILON;
 	const double GRAV_CONST = 6.673E-11;
-	double distanceBetween(vec2 p1, vec2 p2);
-	float angleBetween(vec2 p1, vec2 p2);
 	//Utility Functions for Physics
 	//End of Utility
 };

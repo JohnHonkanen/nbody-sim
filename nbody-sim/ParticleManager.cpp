@@ -30,8 +30,8 @@ void ParticleManager::init()
 	{
 		addParticle(generateParticle());
 	}
-	addParticle(new Particle(vec2(1.5e4, 1.3e4), 1e16, vec2(30,10), true, 5));
 	addParticle(new Particle(vec2(1.8e4, 1.2e4), 5e16, vec2(0, 0), true, 5)); //Error With Physics Code. Need to fix
+	addParticle(new Particle(vec2(1.5e4, 1.3e4), 1e16, vec2(30,10), true, 5));
 }
 
 void ParticleManager::addParticle(Particle* p1)

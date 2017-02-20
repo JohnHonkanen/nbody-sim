@@ -55,7 +55,8 @@ void Particle::accept(Physics physics, Particle* p2)
 	glm::vec2 grav = physics.calculateGravityFrom(this->position, p2->position, this->mass, p2->mass); // Obtain the gravity vector
 	this->force += grav; //Add velocity to Particle gravity
 	glm::vec2 inverseGrav = grav;
-	physics.setAngleOf(inverseGrav, physics.getAngleOf(inverseGrav) + M_PI);
+	double angle = physics.angleBetween(p2->position, this->position);
+	physics.setAngleOf(inverseGrav, angle);
 	p2->force += inverseGrav;
 }
 /* Moves the particle with respect to position and velocity*/
