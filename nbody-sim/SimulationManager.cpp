@@ -7,14 +7,16 @@ SimulationManager::SimulationManager()
 
 SimulationManager::~SimulationManager()
 {
+	delete pManager;
+
 }
 /*
 	Initializing for Particles
 */
 void SimulationManager::init()
 {
-	pManager = ParticleManager(350);
-	pManager.init();
+	pManager = new ParticleManager(350);
+	pManager->init();
 }
 /*
 	Main Loop for Simulation
@@ -61,7 +63,7 @@ bool SimulationManager::pollEvents(SDL_Event sdlEvent) {
 */
 void SimulationManager::update() {
 
-	pManager.accept(physicsVisitor);
+	pManager->accept(physicsVisitor);
 
 }
 /*
@@ -75,7 +77,7 @@ void SimulationManager::draw(SDL_Window *window) {
 	glOrtho(0, 3.6e4*zoom, 0, 2.4e4*zoom, 0.0f, 1.0f); // Reference system of our simulation
 	glColor3f(0.5, 1.0, 1.0);
 
-	pManager.draw();
+	pManager->draw();
 
 	SDL_GL_SwapWindow(window); // swap buffers
 }

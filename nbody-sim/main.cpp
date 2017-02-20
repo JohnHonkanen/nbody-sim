@@ -51,10 +51,10 @@ int wmain(int argc, char *argv[])
 		std::cout << "glewInit failed, aborting." << endl;
 		exit(1);
 	} else {
-		SimulationManager manager = SimulationManager();
-		manager.run(window);
+		SimulationManager * manager = new SimulationManager();
+		manager->run(window);
+		delete manager;
 	}
-
 	SDL_GL_DeleteContext(glContext);
 	SDL_DestroyWindow(window);
 	SDL_Quit();

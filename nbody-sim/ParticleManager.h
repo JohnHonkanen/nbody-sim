@@ -13,10 +13,14 @@ public:
 	{
 		Particle* particle;
 		ParticleList* next;
+		virtual ~ParticleList(){
+		}
 	};
 
 	ParticleManager();
 	ParticleManager(int particleCount);
+	virtual ~ParticleManager();
+	void cleanUpParticles();
 	void init();
 	void addParticle(Particle* p1);
 

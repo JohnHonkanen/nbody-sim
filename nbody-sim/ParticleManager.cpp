@@ -2,6 +2,7 @@
 
 ParticleManager::ParticleManager()
 {
+
 }
 
 ParticleManager::ParticleManager(int particleCount)
@@ -15,6 +16,27 @@ ParticleManager::ParticleManager(int particleCount)
 	this->head = node;
 	this->tail = this->head;
 
+}
+
+ParticleManager::~ParticleManager()
+{
+	cleanUpParticles();
+
+}
+
+void ParticleManager::cleanUpParticles()
+{
+	ParticleList* current = this->head;
+
+	while (current != nullptr)
+	{
+		ParticleList *temp = current;
+		current = current->next;
+		
+		delete temp->particle;
+		delete temp;
+			
+	}
 }
 
 Particle* ParticleManager::generateParticle()
