@@ -10,6 +10,7 @@ public:
 	Physics();
 	virtual ~Physics();
 	vec2 calculateGravityFrom(vec2 p1, vec2 p2, double mass, double mass2);
+	double calculateForce(vec2 p1, vec2 p2, double mass, double mass2);
 	float getLengthOf(vec2 p);
 	float getAngleOf(vec2 p);
 	void setAngleOf(vec2 &p, float angle);

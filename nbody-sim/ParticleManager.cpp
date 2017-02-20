@@ -41,7 +41,7 @@ void ParticleManager::cleanUpParticles()
 
 Particle* ParticleManager::generateParticle()
 {
-	return new Particle(vec2(rnd(100, 3.6e4), rnd(100, 2.4e4)), rnd(5e2, 5e10), vec2(rnd(-30,30), rnd(-30, 30)));
+	return new Particle(vec2(rnd(100, 3.6e4), rnd(100, 2.4e4)), rnd(5e10, 5e16), vec2(rnd(-30,30), rnd(-30, 30)));
 }
 
 void ParticleManager::init() 
@@ -52,8 +52,8 @@ void ParticleManager::init()
 	{
 		addParticle(generateParticle());
 	}
-	addParticle(new Particle(vec2(1.8e4, 1.2e4), 5e16, vec2(0, 0), true, 5)); //Error With Physics Code. Need to fix
-	addParticle(new Particle(vec2(1.5e4, 1.3e4), 1e16, vec2(30,10), true, 5));
+	//addParticle(new Particle(vec2(1.8e4, 1.2e4), 5e16, vec2(0, 0), true, 5)); //Error With Physics Code. Need to fix
+	//addParticle(new Particle(vec2(1.5e4, 1.3e4), 1e16, vec2(30,10), true, 5));
 }
 
 void ParticleManager::addParticle(Particle* p1)
@@ -92,15 +92,20 @@ void ParticleManager::calculateForces(Physics physics)
 
 	while (current != nullptr)
 	{
-		ParticleList* innerCurrent = current->next;
+		current->particle->resetForce();
+		ParticleList* innerCurrent = this->head;
 		while (innerCurrent != nullptr)
 		{
-			current->particle->accept(physics, innerCurrent->particle);
+			if (innerCurrent != current) {
+				current->particle->accept(physics, innerCurrent->particle);
+			}
 			innerCurrent = innerCurrent->next;
 		}
-		current->particle->move();
+		//current->particle->move();
 		current = current->next;
 	}
+
+	moveParticles();
 }
 
 void ParticleManager::moveParticles()

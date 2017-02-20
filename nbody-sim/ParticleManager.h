@@ -3,6 +3,7 @@
 #include <GL\glew.h>
 #include "Particle.h"
 #include "Rnd.h"
+#include "BarnesHutTree.h"
 #include <iostream>
 
 class ParticleManager
@@ -17,6 +18,7 @@ public:
 		}
 	};
 
+	Quad* quadTree;
 	ParticleManager();
 	ParticleManager(int particleCount);
 	virtual ~ParticleManager();

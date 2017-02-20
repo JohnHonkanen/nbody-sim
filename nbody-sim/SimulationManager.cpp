@@ -15,7 +15,7 @@ SimulationManager::~SimulationManager()
 */
 void SimulationManager::init()
 {
-	pManager = new ParticleManager(350);
+	pManager = new ParticleManager(1000);
 	pManager->init();
 }
 /*

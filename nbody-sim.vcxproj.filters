@@ -39,6 +39,12 @@
     <ClCompile Include="nbody-sim\Rnd.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="nbody-sim\Quad.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="nbody-sim\BarnesHutTree.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="nbody-sim\stubParticle.h">
@@ -60,6 +66,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="nbody-sim\Rnd.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="nbody-sim\Quad.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="nbody-sim\BarnesHutTree.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
