@@ -37,9 +37,9 @@ float Physics::angleBetween(dvec2 p1, dvec2 p2)
 	double dy = p2.y - p1.y; // Difference between p2 y and p1 y
 	return atan(dy, dx); // Arc tangeant to get the angle between the two;
 }
-double Physics::circularOrbit(dvec2 position)
+double Physics::circularOrbit(double px, double py)
 {
-	double r2 = sqrt(position.x*position.x + position.y*position.y);
+	double r2 = sqrt(px*px + py*py);
 	double numerator = (GRAV_CONST)*SOLAR_MASS*1e6;
 	return sqrt(numerator/r2);
 }

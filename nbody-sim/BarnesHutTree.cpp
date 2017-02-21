@@ -3,7 +3,7 @@
 BarnesHutTree::BarnesHutTree(Quad * q)
 {
 	this->quad = q;
-	this->particle = nullptr;
+	this->body = nullptr;
 	this->NW = nullptr;
 	this->NE = nullptr;
 	this->SW = nullptr;
@@ -21,106 +21,112 @@ bool BarnesHutTree::isExternal(BarnesHutTree * t)
 	return false;
 }
 
-void BarnesHutTree::insert(Particle * p)
+void BarnesHutTree::insert(Body *b)
 {
-	if (this->particle == nullptr) {
-		this->particle = p;
+	if (this->body == nullptr) {
+		this->totalMass = b->mass;
+		this->cmx = b->px;
+		this->cmy = b->py;
+		this->body = b;
 	}
 	else if (this->isExternal(this) == false) {
-		this->totalMass = this->particle->mass + p->mass;
-		this->centerPosition = ((this->particle->position*0.5) + (p->position*0.5));
+		double tMass = this->totalMass + b->mass;
+		this->cmx = (this->cmx * this->totalMass + b->px* b->mass) / tMass;
+		this->cmy = (this->cmy * this->totalMass + b->py* b->mass) / tMass;
+		this->totalMass = tMass;
+		this->body = placeHolder;
 
 		Quad *northWest = this->quad->NW();
-		if (p->in(northWest)) {
+		if (b->in(northWest)) {
 			if (this->NW == nullptr) {
 				this->NW = new BarnesHutTree(northWest);
 			}
-			this->NW->insert(p);
+			this->NW->insert(b);
 		}
 		else {
 			Quad *northEast = this->quad->NE();
-			if (p->in(northEast)) {
+			if (b->in(northEast)) {
 				if (this->NE == nullptr) {
 					this->NE = new BarnesHutTree(northEast);
 				}
-				this->NE->insert(p);
+				this->NE->insert(b);
 			}
 			else {
 				Quad *southEast = this->quad->SE();
-				if (p->in(southEast)) {
+				if (b->in(southEast)) {
 					if (this->SE == nullptr) {
 						this->SE = new BarnesHutTree(southEast);
 					}
-					this->SE->insert(p);
-				}
-				else {
-					Quad *southWest = this->quad->SW();
-					if (p->in(southWest)) {
-						if (this->SW == nullptr) {
-							this->SW = new BarnesHutTree(southWest);
-						}
-						this->SW->insert(p);
-					}
-				}
-			}
-		}
-	}
-	else if (this->isExternal(this)) {
-		Particle * p2 = this->particle;
-		Quad *northWest = this->quad->NW();
-		if (p2->in(northWest)) {
-			if (this->NW == nullptr) {
-				this->NW = new BarnesHutTree(northWest);
-			}
-			this->NW->insert(p2);
-		}
-		else {
-			Quad *northEast = this->quad->NE();
-			if (p2->in(northEast)) {
-				if (this->NE == nullptr) {
-					this->NE = new BarnesHutTree(northEast);
-				}
-				this->NE->insert(p2);
-			}
-			else {
-				Quad *southEast = this->quad->SE();
-				if (p2->in(southEast)) {
-					if (this->SE == nullptr) {
-						this->SE = new BarnesHutTree(southEast);
-					}
-					this->SE->insert(p2);
+					this->SE->insert(b);
 				}
 				else {
 					Quad *southWest = this->quad->SW();
 					if (this->SW == nullptr) {
 						this->SW = new BarnesHutTree(southWest);
 					}
-					this->SW->insert(p2);
+						this->SW->insert(b);
+				}
+			}
+		}
+	}
+	else if (this->isExternal(this)) {
+		Body * c = this->body;
+		Quad *northWest = this->quad->NW();
+		if (c->in(northWest)) {
+			if (this->NW == nullptr) {
+				this->NW = new BarnesHutTree(northWest);
+			}
+			this->NW->insert(c);
+		}
+		else {
+			Quad *northEast = this->quad->NE();
+			if (c->in(northEast)) {
+				if (this->NE == nullptr) {
+					this->NE = new BarnesHutTree(northEast);
+				}
+				this->NE->insert(c);
+			}
+			else {
+				Quad *southEast = this->quad->SE();
+				if (c->in(southEast)) {
+					if (this->SE == nullptr) {
+						this->SE = new BarnesHutTree(southEast);
+					}
+					this->SE->insert(c);
+				}
+				else {
+					Quad *southWest = this->quad->SW();
+					if (this->SW == nullptr) {
+						this->SW = new BarnesHutTree(southWest);
+					}
+					this->SW->insert(c);
 					
 				}
 			}
 		}
-		this->insert(p);
+		this->insert(b);
 	}
 }
 
-void BarnesHutTree::updateForce(Particle * p)
+void BarnesHutTree::updateForce(Body* b)
 {
 	if (this->isExternal(this)) {
-			p->addForce(this->centerPosition, this->totalMass);
+		if (this->body != b)
+		b->addForce(this->cmx, this->cmy, this->totalMass);
+			
 	}
-	else if (this->quad->getLength() / (this->particle->distanceTo(p)) < 2) {
-			p->addForce(this->particle);
+	else if (this->quad->getLength() / (this->body->distanceTo(this->cmx, this->cmy, b->px, b->py)) < 0.5) {
+		b->addForce(this->cmx, this->cmy, this->totalMass);
 	}
 	else {
 		if (this->NW != nullptr)
-			this->NW->updateForce(p);
+			this->NW->updateForce(b);
 		if (this->SW != nullptr)
-			this->SW->updateForce(p);
+			this->SW->updateForce(b);
 		if (this->SE != nullptr)
-			this->SE->updateForce(p);
+			this->SE->updateForce(b);
 		if (this->NE != nullptr)
-			this->NE->updateForce(p);
+			this->NE->updateForce(b);
 	}
 }
 
