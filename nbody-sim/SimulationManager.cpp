@@ -15,7 +15,7 @@ SimulationManager::~SimulationManager()
 */
 void SimulationManager::init()
 {
-	pManager = new ParticleManager(1000);
+	pManager = new ParticleManager(1);
 	pManager->init();
 }
 /*
@@ -62,8 +62,8 @@ bool SimulationManager::pollEvents(SDL_Event sdlEvent) {
 	Handle and Calculate Physics for Simulation
 */
 void SimulationManager::update() {
-
-	pManager->accept(physicsVisitor);
+	//std::cout << "Calculating Forces: " << std::endl;
+	pManager->calculateForces();
 
 }
 /*
@@ -74,7 +74,7 @@ void SimulationManager::draw(SDL_Window *window) {
 	glClear(GL_COLOR_BUFFER_BIT);
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
-	glOrtho(0, 3.6e4*zoom, 0, 2.4e4*zoom, 0.0f, 1.0f); // Reference system of our simulation
+	glOrtho(-1e18, 1e18, -1e18, 1e18, 0.0f, 1.0f); // Reference system of our simulation
 	glColor3f(0.5, 1.0, 1.0);
 
 	pManager->draw();

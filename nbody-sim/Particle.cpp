@@ -4,21 +4,21 @@
 
 Particle::Particle()
 {
-	this->velocity = glm::vec2(0, 0);
+	this->velocity = glm::dvec2(0, 0);
 }
 
 
-Particle::Particle(glm::vec2 p, float mass)
+Particle::Particle(glm::dvec2 p, float mass)
 {
 	this->position = p;
 	this->mass = mass;
-	this->velocity = glm::vec2(0, 0);
-	this->force = glm::vec2(0); //Force
+	this->velocity = glm::dvec2(0, 0);
+	this->force = glm::dvec2(0); //Force
 }
 
-Particle::Particle(glm::vec2 p, double mass, vec2 initialVelocity)
+Particle::Particle(glm::dvec2 p, double mass, dvec2 initialVelocity)
 {
-	this->velocity = glm::vec2(0, 0);
+	this->velocity = glm::dvec2(0, 0);
 	this->position = p;
 	this->mass = mass; // Mass of Object for particle gravity
 	this->velocity = initialVelocity; //Initial Velocity of  Particle
@@ -26,9 +26,9 @@ Particle::Particle(glm::vec2 p, double mass, vec2 initialVelocity)
 	this->size = 1;
 }
 
-Particle::Particle(glm::vec2 p, double mass, vec2 initialVelocity, bool canMove)
+Particle::Particle(glm::dvec2 p, double mass, dvec2 initialVelocity, bool canMove)
 {
-	this->velocity = glm::vec2(0, 0);
+	this->velocity = glm::dvec2(0, 0);
 	this->position = p;
 	this->mass = mass; // Mass of Object for particle gravity
 	this->velocity = initialVelocity; //Initial Velocity of  Particle
@@ -36,9 +36,9 @@ Particle::Particle(glm::vec2 p, double mass, vec2 initialVelocity, bool canMove)
 	this->size = 1;
 }
 
-Particle::Particle(glm::vec2 p, double mass, vec2 initialVelocity, bool canMove, int size)
+Particle::Particle(glm::dvec2 p, double mass, dvec2 initialVelocity, bool canMove, int size)
 {
-	this->velocity = glm::vec2(0, 0);
+	this->velocity = glm::dvec2(0, 0);
 	this->position = p;
 	this->mass = mass; // Mass of Object for particle gravity
 	this->velocity = initialVelocity; //Initial Velocity of  Particle
@@ -72,14 +72,22 @@ void Particle::addForce(Particle* other) {
 	double dy = other->position.y - this->position.y;
 	double dist = sqrt(dx*dx + dy*dy);
 	double F = GRAV_CONST * (this->mass * other->mass) / ((dist*dist) + (EPS*EPS));
-	this->force = glm::vec2(this->force.x + (F * dx / dist), this->force.y + (F * dy / dist));
+	this->force = glm::dvec2(this->force.x + (F * dx / dist), this->force.y + (F * dy / dist));
+}
+void Particle::addForce(dvec2 position, double mass)
+{
+	double dx = position.x - this->position.x;
+	double dy = position.y - this->position.y;
+	double dist = sqrt(dx*dx + dy*dy);
+	double F = GRAV_CONST * (this->mass * mass) / ((dist*dist) + (EPS*EPS));
+	this->force = glm::dvec2(this->force.x + (F * dx / dist), this->force.y + (F * dy / dist));
 }
 /* Moves the particle with respect to position and velocity*/
-void Particle::move()
+void Particle::move(double dt)
 {
 	if (canMove) {
-		this->velocity += glm::vec2(this->force.x / this->mass, this->force.y / this->mass);
-		this->position += this->velocity; //Add our velocity to position
+		this->velocity += glm::dvec2(dt*this->force.x / this->mass, dt*this->force.y / this->mass);
+		this->position += this->velocity*dt; //Add our velocity to position
 
 	}
 }

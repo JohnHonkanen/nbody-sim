@@ -1,4 +1,6 @@
 #pragma once
+#include <iostream>
+#include <GL\glew.h>
 class Quad
 {
 public:
@@ -11,6 +13,7 @@ public:
 	Quad *NE();
 	Quad *SW();
 	Quad *SE();
+	void draw();
 
 private:
 	double xmid;

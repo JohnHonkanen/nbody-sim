@@ -10,6 +10,10 @@ BarnesHutTree::BarnesHutTree(Quad * q)
 	this->SE = nullptr;
 }
 
+BarnesHutTree::~BarnesHutTree()
+{
+}
+
 bool BarnesHutTree::isExternal(BarnesHutTree * t)
 {
 	if((t->NW==nullptr) && (t->NE == nullptr) && (t->SW == nullptr) && (t->SE == nullptr))
@@ -23,7 +27,9 @@ void BarnesHutTree::insert(Particle * p)
 		this->particle = p;
 	}
 	else if (this->isExternal(this) == false) {
-		this->particle = p->add(this->particle, p);
+		this->totalMass = this->particle->mass + p->mass;
+		this->centerPosition = ((this->particle->position*0.5) + (p->position*0.5));
+
 		Quad *northWest = this->quad->NW();
 		if (p->in(northWest)) {
 			if (this->NW == nullptr) {
@@ -101,12 +107,12 @@ void BarnesHutTree::insert(Particle * p)
 void BarnesHutTree::updateForce(Particle * p)
 {
 	if (this->isExternal(this)) {
-		if (this->particle != p) {
+			p->addForce(this->centerPosition, this->totalMass);
+	}
+	else if (this->quad->getLength() / (this->particle->distanceTo(p)) < 2) {
 			p->addForce(this->particle);
-		}
-		else if (this->quad->getLength() / (this->particle->distanceTo(p)) < 2) {
-			p->addForce(this->particle);
-		}
+	}
+	else {
 		if (this->NW != nullptr)
 			this->NW->updateForce(p);
 		if (this->SW != nullptr)
@@ -116,4 +122,32 @@ void BarnesHutTree::updateForce(Particle * p)
 		if (this->NE != nullptr)
 			this->NE->updateForce(p);
 	}
+}
+
+void BarnesHutTree::draw()
+{
+	this->quad->draw();
+	if (this->NW != nullptr)
+		this->NW->draw();
+	if (this->SW != nullptr)
+		this->SW->draw();
+	if (this->SE != nullptr)
+		this->SE->draw();
+	if (this->NE != nullptr)
+		this->NE->draw();
+}
+
+void BarnesHutTree::clearTree()
+{
+	if (this->NW != nullptr)
+		delete this->NW;
+	if (this->SW != nullptr)
+		delete this->SW;
+	if (this->SE != nullptr)
+		delete this->SE;
+	if (this->NE != nullptr)
+		delete this->NE;
+
+	delete this->quad;
+	delete this;
 }

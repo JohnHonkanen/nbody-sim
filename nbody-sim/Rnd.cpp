@@ -1,4 +1,3 @@
-
 #include "Rnd.h"
 
 double rnd(double rangemin, double rangemax)			// random float within supplied range...
@@ -7,4 +6,6 @@ double rnd(double rangemin, double rangemax)			// random float within supplied r
 	return f * (rangemax - rangemin) + rangemin;
 }
 
-
+double exponent(double lambda) {
+	return -log(1 - rnd(0,1)) / lambda;
+}

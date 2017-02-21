@@ -54,3 +54,14 @@ Quad * Quad::SE()
 	Quad* newQuad = new Quad(this->xmid + this->length / 4.0, this->ymid - this->length / 4.0, this->length / 2.0);
 	return newQuad;
 }
+
+void Quad::draw()
+{
+	glBegin(GL_LINES);
+	glVertex3d(this->xmid-length/2.0, this->ymid, 0.0);
+	glVertex3d(this->xmid + length/2.0, this->ymid, 0.0);
+
+	glVertex3d(this->xmid, this->ymid -length/2.0, 0.0);
+	glVertex3d(this->xmid, this->ymid + length/2.0, 0.0);
+	glEnd();
+}

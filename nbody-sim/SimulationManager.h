@@ -22,7 +22,6 @@ public:
 	void draw(SDL_Window *window);
 private:
 	bool running = true;
-	Physics physicsVisitor;
 	float zoom = 1.0f;
 	ParticleManager *pManager;
 };

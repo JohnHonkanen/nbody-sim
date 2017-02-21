@@ -8,14 +8,13 @@ ParticleManager::ParticleManager()
 ParticleManager::ParticleManager(int particleCount)
 {
 	this->particleCount = particleCount;
-
 	ParticleList* node = new ParticleList();
 	node->particle = generateParticle();
 	node->next = nullptr;
-
 	this->head = node;
 	this->tail = this->head;
-
+	this->quad = new Quad(0, 0, 2 * 1e18);
+	tree = new BarnesHutTree(this->quad);
 }
 
 ParticleManager::~ParticleManager()
@@ -41,80 +40,85 @@ void ParticleManager::cleanUpParticles()
 
 Particle* ParticleManager::generateParticle()
 {
-	return new Particle(vec2(rnd(100, 3.6e4), rnd(100, 2.4e4)), rnd(5e10, 5e16), vec2(rnd(-30,30), rnd(-30, 30)));
+	double universeRadius = 1e18; //Radius of our Universe;
+	double posX = universeRadius*exponent(-1.8)*(.5 - rnd(0,1));
+	double posY = universeRadius*exponent(-1.8)*(.5 - rnd(0, 1));
+	dvec2 position = dvec2(posX, posY);
+	double magV = Physics::circularOrbit(position);
+	double absAngle = atan(abs(posY / posX));
+	double thetaV = M_PI / 2 - absAngle;
+
+	double vx = -1 * signum(posY)*cos(thetaV)*magV;
+	double vy = -1 * signum(posX)*sin(thetaV)*magV;
+
+	//Random Orientation for 2D circular Orbit
+	if (rnd(0, 1) <= .5f) {
+		vx = -vx;
+		vy = -vy;
+	}
+
+	double mass = rnd(0, 1) * SOLAR_MASS * 10 + 1e20;
+	dvec2 velocity = dvec2(vx,vy);
+	
+	return new Particle(position, mass, dvec2(0));
 }
 
 void ParticleManager::init() 
 {
 	srand((unsigned)time(NULL));
-
-	for (int i = 0; i < this->particleCount - 1; i++)
-	{
+	for (int i = 0; i < this->particleCount; i++) {
 		addParticle(generateParticle());
 	}
-	//addParticle(new Particle(vec2(1.8e4, 1.2e4), 5e16, vec2(0, 0), true, 5)); //Error With Physics Code. Need to fix
-	//addParticle(new Particle(vec2(1.5e4, 1.3e4), 1e16, vec2(30,10), true, 5));
+	//addParticle(new Particle(dvec2(0), 1e6*SOLAR_MASS, dvec2(0)));
 }
 
-void ParticleManager::addParticle(Particle* p1)
+void ParticleManager::addParticle(Particle* p)
 {
 	ParticleList* node = new ParticleList();
-	node->particle = p1;
+	node->particle = p;
 	node->next = nullptr;
 	this->tail->next = node;
 	this->tail = this->tail->next;
 }
 
-void ParticleManager::accept(Physics physics)
-{
-	calculateForces(physics);
-}
-
 void ParticleManager::draw()
 {
 	ParticleList* current = this->head;
+	glPointSize(1.0f);
+	glBegin(GL_POINTS);
+	while (current != nullptr)
+	{
+		glVertex3d(current->particle->position.x, current->particle->position.y, 0.0);
+		current = current->next;
 		
-
-	while (current != nullptr)
-	{
-		glPointSize(current->particle->size);
-		glBegin(GL_POINTS);
-		//std::cout << current->particle->position.x << " || " << current->particle->position.y << std::endl;
-		glVertex3f(current->particle->position.x, current->particle->position.y, 0.0);
-		current = current->next;
-		glEnd();
 	}
+	glEnd();
+	glColor3f(1.0, 0.5, 1.0);
+
 }
 
-void ParticleManager::calculateForces(Physics physics)
+void ParticleManager::calculateForces()
 {
-	ParticleList* current = this->head;
+	tree->clearTree();
 
-	while (current != nullptr)
-	{
-		current->particle->resetForce();
-		ParticleList* innerCurrent = this->head;
-		while (innerCurrent != nullptr)
-		{
-			if (innerCurrent != current) {
-				current->particle->accept(physics, innerCurrent->particle);
-			}
-			innerCurrent = innerCurrent->next;
+	this->quad = new Quad(0, 0, 2 * 1e18);
+	tree = new BarnesHutTree(this->quad);
+	ParticleList* current = this->head;
+	while (current != nullptr) {
+		if (current->particle->in(this->quad)) {
+			tree->insert(current->particle);
 		}
-		//current->particle->move();
+			
 		current = current->next;
 	}
+	current = this->head;
+	while (current != nullptr) {
 
-	moveParticles();
-}
-
-void ParticleManager::moveParticles()
-{
-	ParticleList* current = this->head;
-
-	while (current != nullptr)
-	{
-		current->particle->move();
+		current->particle->resetForce();
+		if (current->particle->in(this->quad)) {
+			tree->updateForce(current->particle);
+			current->particle->move(1e11);
+		}
 		current = current->next;
 	}
 }
