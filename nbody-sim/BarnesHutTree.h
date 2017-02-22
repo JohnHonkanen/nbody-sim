@@ -4,13 +4,29 @@
 #include <iostream>
 
 struct Body {
-	Body(double px, double py, double vx, double vy, double mass) {
+	Body(double px, double py, double vx, double vy, double mass, float size, float r, float g, float b) {
 		this->px = px;
 		this->py = py;
 		this->vx = vx;
 		this->vy = vy;
 		this->mass = mass;
 		this->staticBody = false;
+		this->r = r;
+		this->g = g;
+		this->b = b;
+		this->size = size;
+	}
+	Body(double px, double py, double vx, double vy, double mass, float size, float r, float g, float b, bool isStatic) {
+		this->px = px;
+		this->py = py;
+		this->vx = vx;
+		this->vy = vy;
+		this->mass = mass;
+		this->staticBody = isStatic;
+		this->r = r;
+		this->g = g;
+		this->b = b;
+		this->size = size;
 	}
 	virtual ~Body() {};
 	double px, py;
@@ -20,15 +36,15 @@ struct Body {
 	double ax = 0; //Acceleration
 	double ay = 0;
 	double mass;
+	float size;
 	bool staticBody;
-	Body* copy() {
-		return new Body(this->px, this->py, 0, 0, mass);
-	}
+	float r, g, b;
 	Body* add(Body* b1, Body* b2) {
 		double totalMass = b1->mass + b2->mass;
 		double cx = (b1->px + b2->px / 2);
 		double cy = (b1->py + b2->py / 2);
-		return new Body(cx,cy,0,0,totalMass);
+		int size = b1->size + b2->size;
+		return new Body(cx,cy,0,0,totalMass, size, b1->r, b2->g, b1->b);
 	}
 	bool in(Quad * q)
 	{
@@ -37,8 +53,11 @@ struct Body {
 	void update(double dt) {
 			vx += dt * ax;
 			vy += dt * ay;
-			px += dt * vx;
-			py += dt * vy;
+			if (!staticBody) {
+				px += dt * vx;
+				py += dt * vy;
+			}
+			
 	}
 	void addForce(double px, double py, double mass)
 	{
@@ -72,7 +91,7 @@ public:
 	void clearTree();
 private:
 	Body* body;
-	Body* placeHolder = new Body(0,0,0,0,0);
+	Body* placeHolder = new Body(0,0,0,0,0,0,0,0,0);
 	double totalMass = 0;
 	double cmx, cmy;
 	Quad* quad;

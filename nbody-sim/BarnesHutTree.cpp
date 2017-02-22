@@ -115,7 +115,7 @@ void BarnesHutTree::updateForce(Body* b)
 		b->addForce(this->cmx, this->cmy, this->totalMass);
 			
 	}
-	else if (this->quad->getLength() / (this->body->distanceTo(this->cmx, this->cmy, b->px, b->py)) < 0.5) {
+	else if (this->quad->getLength() / (this->body->distanceTo(this->cmx, this->cmy, b->px, b->py)) < 2.0) {
 		b->addForce(this->cmx, this->cmy, this->totalMass);
 	}
 	else {

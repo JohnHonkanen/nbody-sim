@@ -38,9 +38,18 @@ Body* ParticleManager::generateBody()
 		vy = -vy;
 	}
 
-	double mass = rnd(0,1) * SOLAR_MASS *10+1e20;
+	double maxValue = 5e10;
+	double mass = rnd(5e3,maxValue) * SOLAR_MASS *10+1e20;
+	double maxSize = maxValue * SOLAR_MASS * 10 + 1e20;
+
+	float size = (mass/(maxSize)) * 3;
+	float r = mass / maxSize+0.1;
+	float g = mass / maxSize+0.3;
+	float b = mass / maxSize+0.1;
 	
-	return new Body(posX, posY, vx,vy, mass);
+	Body *body = new Body(posX, posY, vx, vy, size, r, g, b, mass);
+	body->size = size;
+	return body;
 }
 
 void ParticleManager::init() 
@@ -50,32 +59,28 @@ void ParticleManager::init()
 	for (int i = 0; i < this->particleCount; i++) {
 		this->bodies[i] = generateBody();
 	}
-	delete this->bodies[0];
-	this->bodies[0] = new Body(0,0 / 2, 0,-1e4 ,1e6*SOLAR_MASS);
-	delete this->bodies[1];
-	this->bodies[1] = new Body(-UNIVERSE_RADIUS / 2, -UNIVERSE_RADIUS / 2, 1e4,2e4 , 3e6*SOLAR_MASS);
+	//delete this->bodies[0];
+	this->bodies[0] = new Body(0,0 / 2, 0,-1e4 ,1e6*SOLAR_MASS, 10,1,0.4,0.4, true);
+	this->bodies[2]->px = rnd(-UNIVERSE_RADIUS, UNIVERSE_RADIUS);
+	this->bodies[2]->py = rnd(-UNIVERSE_RADIUS, UNIVERSE_RADIUS);
+	this->bodies[3]->px = rnd(-UNIVERSE_RADIUS, UNIVERSE_RADIUS);
+	this->bodies[3]->py = rnd(-UNIVERSE_RADIUS, UNIVERSE_RADIUS);
+	this->bodies[4]->px = rnd(-UNIVERSE_RADIUS, UNIVERSE_RADIUS);
+	this->bodies[4]->py = rnd(-UNIVERSE_RADIUS, UNIVERSE_RADIUS);
 }
 void ParticleManager::draw()
 {
-	glPointSize(6.0f);
-	glBegin(GL_POINTS);
-	glColor3f(1.0, 0.4, 0.4);
-	glVertex3d(this->bodies[0]->px, this->bodies[0]->py, 0.0);
-	glVertex3d(this->bodies[1]->px, this->bodies[1]->py, 0.0);
-	glEnd();
-
-
-	glPointSize(1.0f);
-	glBegin(GL_POINTS);
-	glColor3f(0.5, 1.0, 1.0);
-	for (int i = 2; i < this->particleCount; i++) {
+	for (int i = 0; i < this->particleCount; i++) {
 		if (this->bodies[i] != nullptr) {
 			if (bodies[i]->in(quad)) {
+				glPointSize(this->bodies[i]->size);
+				glBegin(GL_POINTS);
+				glColor3f(this->bodies[i]->r, this->bodies[i]->g, this->bodies[i]->b);
 				glVertex3d(this->bodies[i]->px, this->bodies[i]->py, 0.0);
+				glEnd();
 			}
 		}
 	}
-	glEnd();
 	//glColor3f(1.0, 0.5, 1.0);
 	//tree->draw();
 }
