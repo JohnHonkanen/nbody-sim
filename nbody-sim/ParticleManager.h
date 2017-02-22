@@ -30,7 +30,7 @@ public:
 	Body* generateBody();
 
 private:
-	const static int particleCount = 10000;
+	const static int particleCount = 5000;
 	Body* bodies[particleCount];
 	
 };

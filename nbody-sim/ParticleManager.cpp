@@ -39,15 +39,15 @@ Body* ParticleManager::generateBody()
 	}
 
 	double maxValue = 5e10;
-	double mass = rnd(5e3,maxValue) * SOLAR_MASS *10+1e20;
+	double mass = irnd(5e3,maxValue) * SOLAR_MASS *10+1e20;
 	double maxSize = maxValue * SOLAR_MASS * 10 + 1e20;
 
 	float size = (mass/(maxSize)) * 3;
-	float r = mass / maxSize+0.1;
-	float g = mass / maxSize+0.3;
-	float b = mass / maxSize+0.1;
+	float r = mass / maxSize +0.1;
+	float g = mass / maxSize +0.3;
+	float b = mass / maxSize +0.1;
 	
-	Body *body = new Body(posX, posY, vx, vy, size, r, g, b, mass);
+	Body *body = new Body(posX, posY, 0, 0, size, r, g, b, mass);
 	body->size = size;
 	return body;
 }
@@ -59,14 +59,16 @@ void ParticleManager::init()
 	for (int i = 0; i < this->particleCount; i++) {
 		this->bodies[i] = generateBody();
 	}
-	//delete this->bodies[0];
-	this->bodies[0] = new Body(0,0 / 2, 0,-1e4 ,1e6*SOLAR_MASS, 10,1,0.4,0.4, true);
-	this->bodies[2]->px = rnd(-UNIVERSE_RADIUS, UNIVERSE_RADIUS);
-	this->bodies[2]->py = rnd(-UNIVERSE_RADIUS, UNIVERSE_RADIUS);
-	this->bodies[3]->px = rnd(-UNIVERSE_RADIUS, UNIVERSE_RADIUS);
-	this->bodies[3]->py = rnd(-UNIVERSE_RADIUS, UNIVERSE_RADIUS);
-	this->bodies[4]->px = rnd(-UNIVERSE_RADIUS, UNIVERSE_RADIUS);
-	this->bodies[4]->py = rnd(-UNIVERSE_RADIUS, UNIVERSE_RADIUS);
+	delete this->bodies[0];
+	this->bodies[0] = new Body(0,0 / 2, 0,-1e4 ,1e6*SOLAR_MASS, 10,1,0.4,0.4, false);
+	this->bodies[1]->px = rnd(-UNIVERSE_RADIUS, UNIVERSE_RADIUS)*0.4;
+	this->bodies[1]->py = rnd(-UNIVERSE_RADIUS, UNIVERSE_RADIUS)*0.4;
+	this->bodies[1]->mass = 1e6*SOLAR_MASS;
+	this->bodies[1]->size = 10;
+	this->bodies[1]->r = 1; this->bodies[1]->g = 0.4; this->bodies[1]->b = 0.4;
+	this->bodies[1]->staticBody = false;
+	
+	
 }
 void ParticleManager::draw()
 {
