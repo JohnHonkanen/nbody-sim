@@ -1,0 +1,37 @@
+#pragma once
+
+#include <GL\glew.h>
+#include "Rnd.h"
+#include "BarnesHutTree.h"
+#include <iostream>
+
+
+template<typename T>
+T signum(T n)
+{
+	if (n < 0) return -1;
+	if (n > 0) return 1;
+	return 0;
+}
+
+class ParticleManager
+{
+public:
+
+	Quad* quad;
+	BarnesHutTree *tree = nullptr;
+	ParticleManager();
+	virtual ~ParticleManager();
+	void cleanUpParticles();
+	void init();
+	void calculateForces();
+	void draw();
+
+	Body* generateBody();
+
+private:
+	const static int particleCount = 5000;
+	Body* bodies[particleCount];
+	
+};
+
