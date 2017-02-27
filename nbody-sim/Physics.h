@@ -5,11 +5,12 @@
 #include <limits>
 using namespace glm;
 
-const double static GRAV_CONST = 6.673E-11;
-const double static SOLAR_MASS = 1.98892e30;
-const double static EARTH_MASS = 5.972e24;
-const double static EPS = DBL_EPSILON;
-const double static UNIVERSE_RADIUS = 1e18;
+const double GRAV_CONST = 6.673E-11;
+const double SOLAR_MASS = 1.98892e30;
+const double EARTH_MASS = 5.972e24;
+const double EPS = 3e4;
+const double UNIVERSE_RADIUS = 1e18;
+const double DEGREE_TO_RADIANS = 0.0174533;
 
 class Physics
 {

@@ -23,18 +23,18 @@ bool BarnesHutTree::isExternal(BarnesHutTree * t)
 
 void BarnesHutTree::insert(Body *b)
 {
-	if (this->body == nullptr) {
+	if (this->hasBody == false) {
 		this->totalMass = b->mass;
 		this->cmx = b->px;
 		this->cmy = b->py;
 		this->body = b;
+		this->hasBody = true;
 	}
 	else if (this->isExternal(this) == false) {
 		double tMass = this->totalMass + b->mass;
 		this->cmx = (this->cmx * this->totalMass + b->px* b->mass) / tMass;
 		this->cmy = (this->cmy * this->totalMass + b->py* b->mass) / tMass;
 		this->totalMass = tMass;
-		this->body = placeHolder;
 
 		Quad *northWest = this->quad->NW();
 		if (b->in(northWest)) {

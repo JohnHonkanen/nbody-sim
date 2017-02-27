@@ -13,8 +13,9 @@ ParticleManager::~ParticleManager()
 
 void ParticleManager::cleanUpParticles()
 {
-	for (int i = 0; i < this->particleCount; i++) {
-		delete this->bodies[i];
+	int i = 0;
+	for (std::vector<Body*>::iterator it = this->bodies.begin(); it != this->bodies.end(); it++, i++) {
+			delete this->bodies.at(i);
 	}
 }
 
@@ -38,47 +39,39 @@ Body* ParticleManager::generateBody()
 		vy = -vy;
 	}
 
-	double maxValue = 5e10;
-	double mass = irnd(5e3,maxValue) * SOLAR_MASS *10+1e20;
+	double maxValue = 1;
+	double mass = rnd(0,maxValue) * SOLAR_MASS *10+1e20;
 	double maxSize = maxValue * SOLAR_MASS * 10 + 1e20;
 
-	float size = (mass/(maxSize)) * 3;
+	double radius = 4e15;
 	float r = mass / maxSize +0.1;
 	float g = mass / maxSize +0.3;
 	float b = mass / maxSize +0.1;
-	
-	Body *body = new Body(posX, posY, 0, 0, size, r, g, b, mass);
-	body->size = size;
-	return body;
+	return new Body(posX, posY, vx, vy, mass, radius, r, g, b);
 }
 
 void ParticleManager::init() 
 {
 	srand((unsigned)time(NULL));
-	
-	for (int i = 0; i < this->particleCount; i++) {
-		this->bodies[i] = generateBody();
+	for (int i = 0; i < this->particleCount;i++) {
+		this->bodies.push_back(generateBody());
 	}
-	delete this->bodies[0];
-	this->bodies[0] = new Body(0,0 / 2, 0,-1e4 ,1e6*SOLAR_MASS, 10,1,0.4,0.4, false);
-	this->bodies[1]->px = rnd(-UNIVERSE_RADIUS, UNIVERSE_RADIUS)*0.4;
-	this->bodies[1]->py = rnd(-UNIVERSE_RADIUS, UNIVERSE_RADIUS)*0.4;
-	this->bodies[1]->mass = 1e6*SOLAR_MASS;
-	this->bodies[1]->size = 10;
-	this->bodies[1]->r = 1; this->bodies[1]->g = 0.4; this->bodies[1]->b = 0.4;
-	this->bodies[1]->staticBody = false;
-	
-	
+	delete this->bodies.at(0);
+	this->bodies.at(0) = new Body(0, 0, 0, 0, 1e6*SOLAR_MASS, 1e16, 1,1,1, true);
+	std::cout << "DONE" << std::endl;
 }
 void ParticleManager::draw()
 {
 	for (int i = 0; i < this->particleCount; i++) {
 		if (this->bodies[i] != nullptr) {
 			if (bodies[i]->in(quad)) {
-				glPointSize(this->bodies[i]->size);
-				glBegin(GL_POINTS);
+				//glPointSize(5);
+				glBegin(GL_POLYGON);
 				glColor3f(this->bodies[i]->r, this->bodies[i]->g, this->bodies[i]->b);
-				glVertex3d(this->bodies[i]->px, this->bodies[i]->py, 0.0);
+			
+				for (int v = 0; v < numberOfPoints; v++) {
+					glVertex3d(this->bodies[i]->vertices[v].x + this->bodies[i]->px, this->bodies[i]->vertices[v].y + this->bodies[i]->py, 0.0);
+				}
 				glEnd();
 			}
 		}
@@ -109,10 +102,6 @@ void ParticleManager::calculateForces()
 				tree->updateForce(this->bodies[i]);
 				this->bodies[i]->update(1e11);
 			}
-		}
-		else {
-			delete this->bodies[i];
-		}
-		
+		}	
 	}
 }

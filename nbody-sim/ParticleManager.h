@@ -4,6 +4,7 @@
 #include "Rnd.h"
 #include "BarnesHutTree.h"
 #include <iostream>
+#include <vector>
 
 
 template<typename T>
@@ -30,8 +31,7 @@ public:
 	Body* generateBody();
 
 private:
-	const static int particleCount = 5000;
-	Body* bodies[particleCount];
-	
+	int particleCount = 5000;
+	std::vector<Body*> bodies;	
 };
 

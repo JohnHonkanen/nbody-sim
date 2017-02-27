@@ -2,9 +2,12 @@
 #include "Physics.h"
 #include "Quad.h";
 #include <iostream>
+#include <vector>
 
+const int numberOfPoints = 30;
+const float STEP = 2 * M_PI / numberOfPoints;
 struct Body {
-	Body(double px, double py, double vx, double vy, double mass, float size, float r, float g, float b) {
+	Body(double px, double py, double vx, double vy, double mass, double radius, float r, float g, float b) {
 		this->px = px;
 		this->py = py;
 		this->vx = vx;
@@ -14,9 +17,10 @@ struct Body {
 		this->r = r;
 		this->g = g;
 		this->b = b;
-		this->size = size;
+		this->radius = radius;
+		calculateVertices();
 	}
-	Body(double px, double py, double vx, double vy, double mass, float size, float r, float g, float b, bool isStatic) {
+	Body(double px, double py, double vx, double vy, double mass, double radius, float r, float g, float b, bool isStatic) {
 		this->px = px;
 		this->py = py;
 		this->vx = vx;
@@ -26,26 +30,28 @@ struct Body {
 		this->r = r;
 		this->g = g;
 		this->b = b;
-		this->size = size;
+		this->radius = radius;
+		calculateVertices();
+	}
+	void calculateVertices() {
+		int i = 0;
+		for (float angle = 0; angle < 2*M_PI; angle += STEP) {
+			double x = this->radius * cos(angle);
+			double y = this->radius * sin(angle);
+			vertices.push_back(dvec2(x, y));
+			i++;
+		}
 	}
 	virtual ~Body() {};
 	double px, py;
 	double vx, vy;
-	//double fx = 0;
-	//double fy = 0;
 	double ax = 0; //Acceleration
 	double ay = 0;
 	double mass;
-	float size;
+	double radius;
 	bool staticBody;
 	float r, g, b;
-	Body* add(Body* b1, Body* b2) {
-		double totalMass = b1->mass + b2->mass;
-		double cx = (b1->px + b2->px / 2);
-		double cy = (b1->py + b2->py / 2);
-		int size = b1->size + b2->size;
-		return new Body(cx,cy,0,0,totalMass, size, b1->r, b2->g, b1->b);
-	}
+	std::vector<dvec2> vertices;
 	bool in(Quad * q)
 	{
 		return q->contains(this->px, this->py);
@@ -64,8 +70,8 @@ struct Body {
 		double dx = px - this->px;
 		double dy = py - this->py;
 		double dist = sqrt(dx*dx + dy*dy);
-		//double F = GRAV_CONST * (this->mass * mass) / ((dist*dist) + (EPS*EPS));
-		double A= (GRAV_CONST * mass) / ((dist*dist) + (EPS*EPS));
+		
+		double A= (GRAV_CONST * mass) / ((dist*dist) + (EPS*EPS)); //EPS Dampener
 		this->ax += (A*dx / dist);
 		this->ay += (A*dy / dist);
 	}
@@ -91,7 +97,7 @@ public:
 	void clearTree();
 private:
 	Body* body;
-	Body* placeHolder = new Body(0,0,0,0,0,0,0,0,0);
+	bool hasBody = false;
 	double totalMass = 0;
 	double cmx, cmy;
 	Quad* quad;
