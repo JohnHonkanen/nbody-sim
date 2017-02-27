@@ -3,12 +3,12 @@
 ParticleManager::ParticleManager()
 {
 	this->quad = new Quad(0, 0, 2 * 1e18);
-	tree = new BarnesHutTree(this->quad);
 	this->init();
 }
 
 ParticleManager::~ParticleManager()
 {
+	delete tree;
 }
 
 void ParticleManager::cleanUpParticles()
@@ -43,11 +43,11 @@ Body* ParticleManager::generateBody()
 	double mass = rnd(0,maxValue) * SOLAR_MASS *10+1e20;
 	double maxSize = maxValue * SOLAR_MASS * 10 + 1e20;
 
-	double radius = 4e15;
+	double radius = mass / maxSize * 4e15;
 	float r = mass / maxSize +0.1;
 	float g = mass / maxSize +0.3;
 	float b = mass / maxSize +0.1;
-	return new Body(posX, posY, vx, vy, mass, radius, r, g, b);
+	return new Body(posX, posY, 0, 0, mass, radius, r, g, b);
 }
 
 void ParticleManager::init() 
@@ -58,14 +58,13 @@ void ParticleManager::init()
 	}
 	delete this->bodies.at(0);
 	this->bodies.at(0) = new Body(0, 0, 0, 0, 1e6*SOLAR_MASS, 1e16, 1,1,1, true);
-	std::cout << "DONE" << std::endl;
+	tree = new BarnesHutTree(this->quad, 0);
 }
 void ParticleManager::draw()
 {
 	for (int i = 0; i < this->particleCount; i++) {
 		if (this->bodies[i] != nullptr) {
 			if (bodies[i]->in(quad)) {
-				//glPointSize(5);
 				glBegin(GL_POLYGON);
 				glColor3f(this->bodies[i]->r, this->bodies[i]->g, this->bodies[i]->b);
 			
@@ -83,25 +82,14 @@ void ParticleManager::draw()
 void ParticleManager::calculateForces()
 {
 	tree->clearTree();
-
-	this->quad = new Quad(0, 0, 2 * 1e18);
-	tree = new BarnesHutTree(this->quad);
-
-	for (int i = 0; i < this->particleCount; i++) {
-		if (this->bodies[i] != nullptr) {
-			if (bodies[i]->in(quad)) {
-				tree->insert(this->bodies[i]);
-			}
+	tree->setUpTree(this->bodies);
+	
+	//Calculate Forces
+	for (int i = 0; i < this->bodies.size(); i++) {
+		this->bodies[i]->resetForce();
+		if (bodies[i]->in(quad)) {
+			tree->updateForce(this->bodies[i]);
+			this->bodies[i]->update(1e9);
 		}
-	}
-
-	for (int i = 0; i < this->particleCount; i++) {
-		if (this->bodies[i] != nullptr) {
-			this->bodies[i]->resetForce();
-			if (bodies[i]->in(quad)) {
-				tree->updateForce(this->bodies[i]);
-				this->bodies[i]->update(1e11);
-			}
-		}	
 	}
 }

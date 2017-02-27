@@ -4,6 +4,8 @@
 #include <iostream>
 #include <vector>
 
+#define MAX_DEPTH 100
+using namespace std;
 const int numberOfPoints = 30;
 const float STEP = 2 * M_PI / numberOfPoints;
 struct Body {
@@ -88,19 +90,24 @@ struct Body {
 };
 class BarnesHutTree {
 public:
-	BarnesHutTree(Quad* q);
+	BarnesHutTree(Quad* q, unsigned int depth);
+	BarnesHutTree(Quad* q, vector<Body*> bodies, unsigned int depth);
 	virtual ~BarnesHutTree();
+	void generateChildren();
+	void setUpTree(vector<Body*> bodies);
 	bool isExternal(BarnesHutTree* t);
 	void insert(Body* b);
 	void updateForce(Body* b);
 	void draw();
 	void clearTree();
+	void calculateCenterOfMass();
 private:
-	Body* body;
-	bool hasBody = false;
+	vector<Body*> bodies;
 	double totalMass = 0;
 	double cmx, cmy;
+	unsigned int depth;
 	Quad* quad;
+	bool hasChildren = false;
 	BarnesHutTree* NW;
 	BarnesHutTree* NE;
 	BarnesHutTree* SW;
