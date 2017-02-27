@@ -3,7 +3,7 @@
 ParticleManager::ParticleManager()
 {
 	this->quad = new Quad(0, 0, 2 * 1e18);
-	tree = new BarnesHutTree(this->quad);
+	tree = new BarnesHutTree(this->quad, 0);
 	this->init();
 }
 
@@ -39,15 +39,15 @@ Body* ParticleManager::generateBody()
 		vy = -vy;
 	}
 
-	double maxValue = 1;
+	double maxValue = 1e5;
 	double mass = rnd(0,maxValue) * SOLAR_MASS *10+1e20;
 	double maxSize = maxValue * SOLAR_MASS * 10 + 1e20;
 
-	double radius = 4e15;
+	double radius = mass/maxSize * 4e15;
 	float r = mass / maxSize +0.1;
 	float g = mass / maxSize +0.3;
 	float b = mass / maxSize +0.1;
-	return new Body(posX, posY, vx, vy, mass, radius, r, g, b);
+	return new Body(posX, posY, 0, 0, mass, radius, r, g, b);
 }
 
 void ParticleManager::init() 
@@ -56,9 +56,9 @@ void ParticleManager::init()
 	for (int i = 0; i < this->particleCount;i++) {
 		this->bodies.push_back(generateBody());
 	}
-	delete this->bodies.at(0);
-	this->bodies.at(0) = new Body(0, 0, 0, 0, 1e6*SOLAR_MASS, 1e16, 1,1,1, true);
-	std::cout << "DONE" << std::endl;
+	//delete this->bodies.at(0);
+	//this->bodies.at(0) = new Body(0, 0, 0, 0, 1e6*SOLAR_MASS, 1e16, 1,1,1, true);
+	//std::cout << "DONE" << std::endl;
 }
 void ParticleManager::draw()
 {
@@ -85,7 +85,7 @@ void ParticleManager::calculateForces()
 	tree->clearTree();
 
 	this->quad = new Quad(0, 0, 2 * 1e18);
-	tree = new BarnesHutTree(this->quad);
+	tree = new BarnesHutTree(this->quad,0);
 
 	for (int i = 0; i < this->particleCount; i++) {
 		if (this->bodies[i] != nullptr) {
@@ -95,12 +95,20 @@ void ParticleManager::calculateForces()
 		}
 	}
 
-	for (int i = 0; i < this->particleCount; i++) {
+	vector<Body*>::iterator it;
+	for (int i = 0; i < this->bodies.size(); i++) {
 		if (this->bodies[i] != nullptr) {
 			this->bodies[i]->resetForce();
 			if (bodies[i]->in(quad)) {
-				tree->updateForce(this->bodies[i]);
-				this->bodies[i]->update(1e11);
+				int colliding = 0;
+				tree->updateForce(this->bodies[i], colliding);
+				if (colliding == 1) {
+					delete bodies[i];
+				}
+				else {
+					this->bodies[i]->update(1e11);
+				}
+				
 			}
 		}	
 	}

@@ -31,7 +31,7 @@ public:
 	Body* generateBody();
 
 private:
-	int particleCount = 5000;
+	int particleCount = 1000;
 	std::vector<Body*> bodies;	
 };
 

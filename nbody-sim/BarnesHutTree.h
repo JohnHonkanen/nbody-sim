@@ -3,9 +3,13 @@
 #include "Quad.h";
 #include <iostream>
 #include <vector>
+#define MAX_DEPTH 30
+
+using namespace std;
 
 const int numberOfPoints = 30;
 const float STEP = 2 * M_PI / numberOfPoints;
+const double maxSize = SOLAR_MASS * 10 + 1e20;
 struct Body {
 	Body(double px, double py, double vx, double vy, double mass, double radius, float r, float g, float b) {
 		this->px = px;
@@ -85,18 +89,44 @@ struct Body {
 		ax = 0.0;
 		ay = 0.0;
 	}
+	bool checkCollisions(Body* other) {
+		float dx = (other->px - this->px);
+		float dy = (other->py - this->py);
+		//float dz = (p2->position.z - this->position.z); For 3d
+		float distance = sqrtf((dx * dx) + (dy * dy));
+		//float distance = sqrtf((dx * dx) + (dy * dy) + (dz * dz)); For 3d
+		float threshold = (this->radius + other->radius);
+
+		return (distance <= threshold); //If there has been a collision.
+	}
+	void collisionReaction(Body* other) {
+		if ((other->mass) <= this->mass) {
+			this->mass = this->mass + other->mass;
+			delete other;
+		}
+		else {
+			other->mass = other->mass + this->mass;
+			delete this;
+		}
+	}
+
+	void calculateRadius() {
+		this->radius = mass / maxSize * 4e15;
+		calculateVertices();
+	}
 };
 class BarnesHutTree {
 public:
-	BarnesHutTree(Quad* q);
+	BarnesHutTree(Quad* q, unsigned int depth);
 	virtual ~BarnesHutTree();
 	bool isExternal(BarnesHutTree* t);
 	void insert(Body* b);
-	void updateForce(Body* b);
+	void updateForce(Body* b, int &colliding);
 	void draw();
 	void clearTree();
 private:
-	Body* body;
+	vector<Body*> bodies;
+	unsigned int depth;
 	bool hasBody = false;
 	double totalMass = 0;
 	double cmx, cmy;
